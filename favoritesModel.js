@@ -7,9 +7,8 @@
  * and you want to know the weather and things to do when you get there like
  * good places to eat, bands that are playing, hot spots etc.
  ********************************************************************************** */
-
-// Use strict to keep things sane and not crap code
 "use strict";
+/* jshint node: true */
 
 const firebase = require("firebase");
 

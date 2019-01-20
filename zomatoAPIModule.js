@@ -1,5 +1,7 @@
  //Zomato API 
  "use strict";
+ /* jshint node: true */
+
  const https = require('https');
 
  //1st API call to zomato api - this returns city data that we need to use to call in the 

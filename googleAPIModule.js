@@ -1,3 +1,6 @@
+"use strict";
+/* jshint node: true */
+
 const https = require('https');
 
 // Current Weather Object Class - just to show what is being passed

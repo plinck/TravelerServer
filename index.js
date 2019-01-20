@@ -7,9 +7,11 @@
  * and you want to know the weather and things to do when you get there like
  * good places to eat, bands that are playing, hot spots etc.
  ********************************************************************************** */
-
-// Use strict to keep things sane and not crap code
 "use strict";
+/* jshint node: true */
+
+const express = require('express');
+//const bodyParser = require('body-parser');
 
 const http = require("http");
 const url = require("url");
@@ -18,50 +20,62 @@ const weatherDB = require("./weatherModule.js");
 const favDB = require("./favoritesModel.js");
 const googDB = require("./googleAPIModule.js");
 
-const hostname = "localhost";
-const port = 3000;
+let app = express();
+app.use(express.json());
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/JSON");
-
-    let path = url.parse(req.url).pathname;
-    switch (path) {
-        case "/":
-            console.log(path);
-            break;
-        case "/weather":
-            console.log(path);
-            weatherDB.getWeatherDB({
-                lat: 33,
-                lng: -84
-            }, (currentWeather, dailyWeather) => {
-                console.log(currentWeather);
-                console.log(dailyWeather);
-                res.write(JSON.stringify(currentWeather));
-                res.write(JSON.stringify(dailyWeather));
-                res.end();
-            }, (errCode) => {});
-            break;
-        case "/locationsByName":
-            console.log(path);
-            favDB.favoritesGetByName((favsDB) => {
-                let favoritePlaces = favsDB; // copy the array into the global var for this context
-
-                googDB.getLatLongForPlace(favoritePlaces[0], (newDataForAddress) => {
-                    console.log(newDataForAddress);
-                    favoritePlaces[0].lat = newDataForAddress.lat;
-                    favoritePlaces[0].lng = newDataForAddress.lng;
-                    res.write(JSON.stringify(favoritePlaces));
-                    res.end();
-                }, (errCode) => {
-                    console.log(errCode);
-                });
-            });
-            break;
-    }
+// This responds a POST request for the homepage
+app.post('/', function (req, res) {
+    // Use express body parse to get JSON Data passed in the post
+    console.log(`Got a POST request ${req.body}`);
+ 
+    res.send(req.body);
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server Running ${port}`);
+// This responds a DELETE request 
+app.delete('/del_fav', function (req, res) {
+    console.log("Got a DELETE request for /del_user");
+    res.send('Hello DELETE');
+});
+
+app.get('/weather', (req, res) => {
+    console.log("Got a GET request for /weather");
+    let lat = req.query.lat;
+    let lng = req.query.lng;
+    
+    weatherDB.getWeatherDB({    
+        lat: lat,
+        lng: lng
+    }, (currentWeather, dailyWeather) => {
+        let weatherResponse = {
+            currentWeather: currentWeather,
+            dailyWeather: dailyWeather
+        };
+        res.write(JSON.stringify(weatherResponse));
+        res.end();
+    }, (errCode) => {});
+});
+
+// This responds a GET request for favorites, favoritesByName etc etc
+app.get('/favorites*', function (req, res) {
+    console.log("Got a GET request for /favorites*");
+    favDB.favoritesGetByName((favsDB) => {
+        let favoritePlaces = favsDB; // copy the array into the global var for this context
+
+        googDB.getLatLongForPlace(favoritePlaces[0], (newDataForAddress) => {
+            console.log(newDataForAddress);
+            favoritePlaces[0].lat = newDataForAddress.lat;
+            favoritePlaces[0].lng = newDataForAddress.lng;
+            res.end(JSON.stringify(favoritePlaces));
+        }, (errCode) => {
+            console.log(errCode);
+        });
+    });
+});
+
+// Start of node/express module
+let server = app.listen(3000, () => {
+    let host = server.address().hostname;
+    let port = server.address().port;
+
+    console.log(`Example app listening at http://${host}:${port}`);
 });
