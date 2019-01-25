@@ -76,7 +76,8 @@ app.get('/favorites*', function (req, res) {
 });
 
 // Start of node/express module
-let server = app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
+let server = app.listen(PORT, () => {
     let host = server.address().hostname;
     let port = server.address().port;
 
