@@ -2,6 +2,8 @@
  "use strict";
  /* jshint node: true */
 
+// Read and set environment variables
+require("dotenv").config();
  const https = require('https');
 
  //1st API call to zomato api - this returns city data that we need to use to call in the 
@@ -31,7 +33,7 @@
  }
 
  function locationInfoCall(lat, long, callback) {
-     let apiKey = "0873254cb6494b6d3d3851a49e152e4c"
+     let apiKey = process.env.ZOMATO_API_KEY;
      let cityId = "";
      let cityStateName = "";
      let entityType = "";

@@ -11,6 +11,8 @@
 "use strict";
 /* jshint node: true */
 
+// Read and set environment variables
+require("dotenv").config();
 const https = require('https');
 
 // Current Weather Object Class - just to show what is being passed
@@ -64,7 +66,7 @@ function httpGet(requestURL, aCallback, errCallback) {
 module.exports = {
 
     getWeatherDB: function (geoLocation, aCallback, errCallback) {
-        const PAUL_DARKSKY_APIKEY = "889d321b7d461f9aa8d4a951f2e163b6";
+        const PAUL_DARKSKY_APIKEY = process.env.PAUL_DARKSKY_APIKEY;
 
         let currentWeather = {};
         let dailyWeather = [];

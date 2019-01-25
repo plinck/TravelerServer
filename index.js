@@ -34,6 +34,7 @@ app.post('/', function (req, res) {
 // This responds a DELETE request 
 app.delete('/del_fav', function (req, res) {
     console.log("Got a DELETE request for /del_user");
+    res.setHeader('Content-Type', 'application/json');
     res.send('Hello DELETE');
 });
 
@@ -41,6 +42,7 @@ app.get('/weather', (req, res) => {
     console.log("Got a GET request for /weather");
     let lat = req.query.lat;
     let lng = req.query.lng;
+    res.setHeader('Content-Type', 'application/json');
     
     weatherDB.getWeatherDB({    
         lat: lat,
@@ -58,6 +60,7 @@ app.get('/weather', (req, res) => {
 // This responds a GET request for favorites, favoritesByName etc etc
 app.get('/favorites*', function (req, res) {
     console.log("Got a GET request for /favorites*");
+    res.setHeader('Content-Type', 'application/json');
     favDB.favoritesGetByName((favsDB) => {
         let favoritePlaces = favsDB; // copy the array into the global var for this context
 

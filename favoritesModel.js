@@ -10,13 +10,15 @@
 "use strict";
 /* jshint node: true */
 
+// Read and set environment variables
+require("dotenv").config();
 const firebase = require("firebase");
 
 // User info hardcode - when auth added, use real user info
 const userID = "team9";
 
 // Firebase
-const PAUL_FB_APIKEY = "AIzaSyC1rPD9yqt2-9mk-T2WEwmFAc4uzYYr1UI";
+const PAUL_FB_APIKEY = process.env.PAUL_FB_APIKEY;
 
 // Initialize Firebase
 var config = {

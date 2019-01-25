@@ -1,6 +1,8 @@
 "use strict";
 /* jshint node: true */
 
+// Read and set environment variables
+require("dotenv").config();
 const https = require('https');
 
 // Current Weather Object Class - just to show what is being passed
@@ -58,7 +60,7 @@ function httpGet(requestURL, aCallback, errCallback) {
 module.exports = {
 
     getLatLongForPlace: function (favoritePlace, aCallback, errCallback) {
-        const PAUL_GOOGLE_APIKEY = "AIzaSyCLRBB75clINkYZNewdGEBcxcLn9QOXUCw";
+        const PAUL_GOOGLE_APIKEY = process.env.PAUL_GOOGLE_APIKEY;
 
         let address = `${favoritePlace.address}${favoritePlace.city}${favoritePlace.state}${favoritePlace.zipCode}`;
 
